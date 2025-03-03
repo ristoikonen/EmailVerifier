@@ -107,6 +107,10 @@ export class AppComponent {
 
       }
 
+      myFunc(event: Event){
+        console.log("function called:" + (event.target as HTMLOptionElement).value);
+      }
+
 }
 
 

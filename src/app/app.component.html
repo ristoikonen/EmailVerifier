@@ -188,6 +188,7 @@
             <td>{{ item.first_name }}</td>
             <td>{{ item.last_name }}</td>
             <td>{{ item.email }}</td>
+            <td><img src="{{ item.avatar }}" alt="{{ item.first_name }}"/></td>
           </tr>
         } 
 
@@ -203,31 +204,37 @@
       <h1>title: {{title}} </h1>
       <h1>Warning: {{ warn }}</h1>
 
-      <ul>
+      
+
+       
 
 
-<!--         @for (item of arrx; track item.title) {
-          <li> {{ item.title }}</li>
-        }  -->
 
-        <!-- <div>{{user.lastName}}</div> --> 
-        <!-- <div>{{user.lastName}}</div> | async-->
-
-        
-
-        <li *ngFor="let lp of album">
-          {{ lp.title }}
-        </li> 
-
-
-      </ul>
+      
     </div>
 
 
-
     <div class="divider" role="separator" aria-label="Divider"></div>
+
+
+
+    
     <div class="right-side">
+
+      <label for="states">Choose your State</label>
       
+      <select title="States" name="states" multiple size="3" (change)="myFunc($event)">
+        <option value="ACT">Option 1</option>
+        <option value="NSW" selected>Option 2</option>
+        <option value="QLD">Option 3</option>
+      </select>
+      
+
+      <ul>
+      <li *ngFor="let lp of album">
+        {{ lp.title }}
+      </li> 
+    </ul>
 
     </div>
 
