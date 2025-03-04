@@ -18,19 +18,21 @@ export class NutdataService {
     readonly wrongUrl = `https://fakestoreapi.com/users?limit=2`;
     readonly albums_url =  "https://jsonplaceholder.typicode.com/albums";
     
-    public getUsers(): Observable<UseriData[]> {
-
-      var ret = this.http.get<UseriData[]>(this.url);
-
-      return this.http.get<UseriData[]>(this.url);
-        
-      //pipe.map(res => res.json());
-    }
 
     public getAlbums(): Observable<IAlbum[]> {
       return this.http.get<IAlbum[]>(this.albums_url);
     }
 
+    public getAlbumById(id: number): Observable<IAlbum> {
+      return this.http.get<IAlbum>(`${this.albums_url}/${id}`);
+    }
+
+    
+    public getUsers(): Observable<UseriData[]> {
+      var ret = this.http.get<UseriData[]>(this.url);
+      return this.http.get<UseriData[]>(this.url);
+      //pipe.map(res => res.json());
+    }
 
     getUserData(): Observable<User[]> {
       return this.http

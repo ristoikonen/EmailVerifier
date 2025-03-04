@@ -203,20 +203,11 @@
       <!-- <h1>Hello  {{ this.userdata[0] }}</h1> -->
       <h1>title: {{title}} </h1>
       <h1>Warning: {{ warn }}</h1>
+      <h1>album: {{ album }}</h1>
 
-      
-
-       
-
-
-
-      
     </div>
 
-
     <div class="divider" role="separator" aria-label="Divider"></div>
-
-
 
     
     <div class="right-side">
@@ -224,14 +215,42 @@
       <label for="states">Choose your State</label>
       
       <select title="States" name="states" multiple size="3" (change)="myFunc($event)">
-        <option value="ACT">Option 1</option>
-        <option value="NSW" selected>Option 2</option>
-        <option value="QLD">Option 3</option>
+        <option value="ACT" >ACT</option>
+        <option value="NSW" selected>NSW</option>
+        <option value="QLD">QLD</option>
       </select>
       
 
-      <ul>
-      <li *ngFor="let lp of album">
+      <table>
+        <tbody>
+        @if (album !== undefined && album.id !== 0) {
+          <tr>
+            <td>UserId</td>
+            <td>id</td>
+            <td>title</td>
+          </tr>
+            <tr>
+              <td>{{ album!.userId }}</td>
+              <td>{{ album!.id }}</td>
+              <td>{{ album!.title }}</td>
+            </tr>
+          } 
+<!--           @if (album !== undefined && album.id === 0) {
+            <tr>
+              <td>Empty</td>
+            </tr>
+            }  -->
+          @else {
+            <tr>
+              <td>Not found</td>
+            </tr>
+
+          }
+        </tbody>
+      </table> 
+
+    <ul>
+      <li *ngFor="let lp of albums">
         {{ lp.title }}
       </li> 
     </ul>
