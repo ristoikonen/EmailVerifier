@@ -201,9 +201,12 @@
     </div> -->
 
       <!-- <h1>Hello  {{ this.userdata[0] }}</h1> -->
-      <h1>title: {{title}} </h1>
-      <h1>Warning: {{ warn }}</h1>
-      <h1>album: {{ album }}</h1>
+      <h2>{{title}} </h2>
+
+
+      <!-- [(ngModel)]="title" -->
+      <input type="text" #emailInput placeholder="Email" />
+      <button type="submit" (click)="this.generateHashOfSix(emailInput.value)">Send Email</button>
 
     </div>
 

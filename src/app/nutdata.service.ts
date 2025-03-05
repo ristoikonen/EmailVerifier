@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { Useri } from './models/useri';
 import { UseriData } from './models/useri-data';
 import { User } from "./models/user";
 import { catchError, tap } from "rxjs/operators";
-import { IAlbum } from "./models/album";
+import { IAlbum, IMessage, IMessagesResult, IMessages, IMessageItem } from "./models/album";
+import { environment } from '../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,8 @@ export class NutdataService {
     readonly url = 'https://reqres.in/api/users?page=1';
     readonly wrongUrl = `https://fakestoreapi.com/users?limit=2`;
     readonly albums_url =  "https://jsonplaceholder.typicode.com/albums";
+    readonly message_url =  "https://api.mail.tm/messages/67c69b4334415a88fd982224";
+    readonly messages_url =  "https://api.mail.tm/messages";
     
 
     public getAlbums(): Observable<IAlbum[]> {
@@ -41,5 +45,19 @@ export class NutdataService {
     }
 
 
+    getMessageById(): Observable<IMessagesResult> {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ` + environment.token
+      })
+      return this.http.get<IMessagesResult>(this.message_url, { headers: headers })
+    }
 
+    getMessages(): Observable<IMessages<IMessagesResult>>{
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ` + environment.token
+      })
+      return this.http.get<IMessages<IMessagesResult>>(this.messages_url, { headers: headers })
+    }
 }

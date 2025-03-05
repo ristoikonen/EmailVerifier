@@ -10,9 +10,10 @@ import { NutdataService } from './nutdata.service';
 import { UserInformation } from './models/user-information';
 import { Useri } from './models/useri';
 import { UseriData } from './models/useri-data'; 
-import { IAlbum, Album } from "./models/album";
+import { IAlbum, Album,IMessage, IMessagesResult,IMessages, IMessageItem } from "./models/album";
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,7 @@ import { CommonModule } from '@angular/common';
 })
 
 export class AppComponent {
-  title = 'ctor';
+  title = 'Verify Email';
   warn = '';
   useries = [];
   userdata$: Array<UseriData> = [];
@@ -31,6 +32,10 @@ export class AppComponent {
   ud: UseriData[] = [];
   albums: IAlbum[] = [];
   album:  Album | undefined;
+  message:  IMessagesResult | undefined;
+  messages:  IMessages<IMessagesResult> | undefined;
+  message_collection: IMessagesResult[] = [];
+  message_totalitems: number = 0;
 
   users = new Array<any>();
   readonly uurl = 'https://reqres.in/api/users?page=1';
@@ -125,7 +130,61 @@ export class AppComponent {
 
       }
 
+    generateHashOfSix(str: string): number {
+        var h: number = 0;
+        for (var i = 0; i < str.length; i++) {
+            //h = 31 * h + str.charCodeAt(i);
+            h = 131 * h + str.charCodeAt(i);
+        }
+        console.log("gh:" + (h%100000));
+        return h%100000;
+    }
+
+      getMessageById() {
+        this.nutdataService.getMessageById().subscribe( {
+          
+          next: (data) => {
+            this.message = data;
+            console.log("data:" + (data).subject);
+            console.log("messages:" + this.message.subject);
+          },
+          error: (err) => {
+            console.log(err);
+          }
+        });
+      }
+
+      
+      getMessages() {
+        this.nutdataService.getMessages().subscribe( {
+          
+          next: (data) => {
+            this.messages = data;
+            this.message_collection = (data['hydra:member'] as IMessagesResult[]);
+            this.message_totalitems = this.messages['hydra:totalItems'];
+
+            console.log("data:" + ( (data['hydra:member'] as IMessagesResult[]) )[0].subject);
+            console.log("messages:" + this.message_totalitems);
+            console.log("message_collection:" + this.message_collection[0].intro);
+            console.log("message_collection:" + this.message_collection[0].from.address);
+
+            let h = this.generateHashOfSix(this.message_collection[0].from.address);
+            console.log("hash:" + h.toString());
+            console.log("env:" + environment.token);
+            
+          },
+          error: (err) => {
+            console.log(err);
+          }
+        });
+      }
+
       myFunc(event: Event){
+        
+        
+        console.log("messages:" + this.getMessages());
+        console.log("message by id:" + this.getMessageById());
+
         console.log("function called:" + (event.target as HTMLOptionElement).value);
         let selected_value = (event.target as HTMLOptionElement).value;
         switch (selected_value) {
