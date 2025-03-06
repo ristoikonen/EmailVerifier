@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
@@ -14,9 +14,11 @@ import { IAlbum, Album,IMessage, IMessagesResult,IMessages, IMessageItem } from 
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { environment } from '../environments/environment';
+import {EverifyComponent} from './everify/everify.component';
 
 @Component({
   selector: 'app-root',
+  providers: [EverifyComponent],
   imports: [CommonModule, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
@@ -24,6 +26,7 @@ import { environment } from '../environments/environment';
 
 export class AppComponent {
   title = 'Verify Email';
+  etitle = '';
   emailhash = '';
   useries = [];
   userdata$: Array<UseriData> = [];
@@ -36,21 +39,23 @@ export class AppComponent {
   messages:  IMessages<IMessagesResult> | undefined;
   message_collection: IMessagesResult[] = [];
   message_totalitems: number = 0;
+  
+  @ViewChild('emailInput', { static: true }) emailInput!: ElementRef;
 
   users = new Array<any>();
   readonly uurl = 'https://reqres.in/api/users?page=1';
 
   constructor(private http: HttpClient,
     private nutdataService: NutdataService, 
+    public everify: EverifyComponent,
     //private dataService: DataserviceService,
-    //private sanitizer: DomSanitizer
     ) { 
 
+      this.etitle = everify.title
       const userObservable = this.nutdataService.getUsers();
 
       let ud = new Array<UseriData>();  
       this.ud.push({first_name: "Male", id: 1, avatar:"https://reqres.in/img/faces/1-image.jpg", email:"dd", last_name:"dd"});
-
 
       //userObservable.pipe(map(r => r)).subscribe((data:UseriData[]) => this.udata = data)
       userObservable.pipe().subscribe((data:UseriData[]) => this.udata = data);
@@ -164,20 +169,59 @@ export class AppComponent {
 
       
       getMessages() {
+
+        let emailIn: string = '';
+        
         this.nutdataService.getMessages().subscribe( {
           
           next: (data) => {
             this.messages = data;
             this.message_collection = (data['hydra:member'] as IMessagesResult[]);
             this.message_totalitems = this.messages['hydra:totalItems'];
+          /*
+            this.message_collection.forEach((result: IMessagesResult) =>{
+              console.log("result.intro:" + result.from.address);
+              let emailaddress= result.from.address;
+              //console.log(emailaddress);
+
+              //const modalElement = this.name.nativeElement;
+              //emailIn = document.getElementById('emailInput')?.nodeValue ?? '';
+              //console.log(emailIn);
+              
+            });
+            */
+           //TODO: add break when match found!
+            for (let result of this.message_collection) 
+            {
+              console.log("FOR result.intro:" + result.from.address);
+              let emailaddress= result.from.address;
+              console.log(emailaddress);
+              //if (match) break;
+              
+              //const modalElement = this.name.nativeElement;
+              //emailIn = document.getElementById('emailInput')?.nodeValue ?? '';
+              //console.log(emailIn);
+              
+            };
+
+            emailIn = this.emailInput.nativeElement.value;
+            //console.log(emailIn);
 
             console.log("data:" + ( (data['hydra:member'] as IMessagesResult[]) )[0].subject);
             console.log("messages:" + this.message_totalitems);
             console.log("message_collection:" + this.message_collection[0].intro);
             console.log("message_collection:" + this.message_collection[0].from.address);
 
-            let h = this.generateHashOfSix(this.message_collection[0].from.address);
-            console.log("hash:" + h.toString());
+            let hashMsg = this.generateHashOfSix(this.message_collection[0].from.address);
+            console.log("hash:" + hashMsg.toString());
+            console.log("everify:" + this.everify.title);
+            console.log("emailIn:" + emailIn);
+            let hashInput = this.generateHashOfSix(emailIn);
+            //console.log("emailInput:" + this.emailInput.nativeElement.value);
+            console.log(hashMsg === hashInput ? "Match" : "No Match");
+
+            this.emailhash = (hashMsg === hashInput ? "Match" : "No Match");
+
             
           },
           error: (err) => {

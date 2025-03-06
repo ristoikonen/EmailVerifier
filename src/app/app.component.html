@@ -189,10 +189,12 @@
 
       <!-- <h1>Hello  {{ this.userdata[0] }}</h1> -->
       <h2>{{title}} </h2>
+      <h2>{{this.etitle}} </h2>
+<!--       <h2>{{everify.title}} </h2> -->
 
 
     <!-- [(ngModel)]="title" -->
-    <input type="text" #emailInput placeholder="Email" />
+    <input type="text" #emailInput placeholder="Email" id="emailInput" />
     <button type="submit" (click)="this.generateHashOfSix(emailInput.value)">Send Email</button>
 
     <h4>{{this.emailhash}} </h4>
