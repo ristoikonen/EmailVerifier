@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import { NgModule } from '@angular/core'; 
 import {  NotFoundError, Observable, throwError } from 'rxjs';
-
+import { interval } from 'rxjs';
 import {map} from 'rxjs/operators';
 import { NutdataService } from './nutdata.service';
 import { UserInformation } from './models/user-information';
@@ -24,7 +24,7 @@ import { environment } from '../environments/environment';
 
 export class AppComponent {
   title = 'Verify Email';
-  warn = '';
+  emailhash = '';
   useries = [];
   userdata$: Array<UseriData> = [];
   udata: UseriData[] = [];
@@ -70,6 +70,11 @@ export class AppComponent {
       this.getAlbumData();
     }
 
+/*     observableRef = interval(2*60*1000)
+      .subscribe(() => {
+        this.getMessageById();
+      });
+ */
     getUseriData() {
       this.nutdataService.getUsers().subscribe( {
         
@@ -133,10 +138,13 @@ export class AppComponent {
     generateHashOfSix(str: string): number {
         var h: number = 0;
         for (var i = 0; i < str.length; i++) {
-            //h = 31 * h + str.charCodeAt(i);
             h = 131 * h + str.charCodeAt(i);
         }
         console.log("gh:" + (h%100000));
+
+        this.emailhash = (h%100000).toString();
+        //this.setIntervalAndTimeout();
+        
         return h%100000;
     }
 
@@ -170,14 +178,24 @@ export class AppComponent {
 
             let h = this.generateHashOfSix(this.message_collection[0].from.address);
             console.log("hash:" + h.toString());
-            console.log("env:" + environment.token);
             
           },
           error: (err) => {
             console.log(err);
           }
-        });
+        })
       }
+
+
+      setIntervalAndTimeout() {
+        
+        // repeat with the interval of 2 seconds
+        let timerId = setInterval(() => {this.getMessageById()}, 2000);
+
+        // after 5 seconds stop
+        setTimeout(() => { clearInterval(timerId); alert('stop'); }, 5000);
+      }
+
 
       myFunc(event: Event){
         

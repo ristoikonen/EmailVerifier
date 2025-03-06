@@ -181,19 +181,6 @@
   <div class="content">
     <div class="left-side">
 
-<table>
-      <tbody>
-      @for (item of users; track item.email) {
-          <tr>
-            <td>{{ item.first_name }}</td>
-            <td>{{ item.last_name }}</td>
-            <td>{{ item.email }}</td>
-            <td><img src="{{ item.avatar }}" alt="{{ item.first_name }}"/></td>
-          </tr>
-        } 
-
-      </tbody>
-    </table> 
 
 
 <!--     <div *ngFor="let item of users | keyvalue">
@@ -204,9 +191,27 @@
       <h2>{{title}} </h2>
 
 
-      <!-- [(ngModel)]="title" -->
-      <input type="text" #emailInput placeholder="Email" />
-      <button type="submit" (click)="this.generateHashOfSix(emailInput.value)">Send Email</button>
+    <!-- [(ngModel)]="title" -->
+    <input type="text" #emailInput placeholder="Email" />
+    <button type="submit" (click)="this.generateHashOfSix(emailInput.value)">Send Email</button>
+
+    <h4>{{this.emailhash}} </h4>
+
+    <div class="margin-top: 10px;">Verify</div>
+
+    <table>
+      <tbody>
+        @for (item of users; track item.email) {
+            <tr>
+              <td>{{ item.first_name }}</td>
+              <td>{{ item.last_name }}</td>
+              <td>{{ item.email }}</td>
+              <td><img src="{{ item.avatar }}" alt="{{ item.first_name }}"/></td>
+            </tr>
+          } 
+  
+        </tbody>
+    </table> 
 
     </div>
 
