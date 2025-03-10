@@ -231,7 +231,6 @@ export class AppComponent {
         })
       }
 
-
       setIntervalAndTimeout() {
         
         // repeat with the interval of 2 seconds
