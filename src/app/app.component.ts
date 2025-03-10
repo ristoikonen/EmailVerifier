@@ -5,7 +5,7 @@ import {FormsModule} from '@angular/forms';
 import { NgModule } from '@angular/core'; 
 import {  NotFoundError, Observable, throwError } from 'rxjs';
 import { interval } from 'rxjs';
-import {map} from 'rxjs/operators';
+import {elementAt, map} from 'rxjs/operators';
 import { NutdataService } from './nutdata.service';
 import { UserInformation } from './models/user-information';
 import { Useri } from './models/useri';
@@ -193,6 +193,7 @@ export class AppComponent {
            //TODO: add break when match found!
             for (let result of this.message_collection) 
             {
+
               console.log("FOR result.intro:" + result.from.address);
               let emailaddress= result.from.address;
               console.log(emailaddress);
